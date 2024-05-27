@@ -29,36 +29,44 @@ void write_binary_file(CodigoList codeList, const char* input_filename, const ch
         fclose(input_file);
         return;
     }
-
-    fprintf(output_file, "%s\n\n", tree);
+    //printf("TREE %s\n",tree);
+    fprintf(output_file, "%sET", tree);
 
     unsigned char buffer = 0;
     int bit_count = 0;
-
+    int char_count = 0, comp_buff_size=2048;
     int ch;
+    char* compressed_buffer = malloc(sizeof(char)*comp_buff_size);
     printf("reading the file..\n");
     while ((ch = fgetc(input_file)) != EOF) {
         unsigned int code=codeList[(int)ch];
-        printf("code %u ", code);
+        //printf("code %u ", code);
         int code_length = get_binary_length(code)-1; //Ignoramos el bit significativo mas grande
-        printf("length %d\n", code_length);
+        //printf("length %d\n", code_length);
         for (int i = code_length - 1; i >= 0; i--) {
             buffer = (buffer << 1) | ((code >> i) & 1);
             bit_count++;
-
+            
             if (bit_count == BYTE_SIZE) {
-                fputc(buffer, output_file);
+                if(comp_buff_size<=char_count){
+                    comp_buff_size*=2;
+                    compressed_buffer= realloc(compressed_buffer,comp_buff_size);
+                }
+                compressed_buffer[char_count++]=buffer;
                 buffer = 0;
                 bit_count = 0;
             }
         }
     }
-
     if (bit_count > 0) {
         buffer <<= (BYTE_SIZE - bit_count); // Pad the remaining bits with zeros
-        fputc(buffer, output_file);
+        if(comp_buff_size<=char_count){
+            comp_buff_size*=2;
+            compressed_buffer= realloc(compressed_buffer,comp_buff_size);
+        }
+        compressed_buffer[char_count++]=buffer;
     }
-
+    fprintf(output_file, "%d\n%s", char_count-1, compressed_buffer);
     fclose(input_file);
     fclose(output_file);
 }

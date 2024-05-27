@@ -5,36 +5,36 @@
 #include "huffmanTree.h"
 #include "codigo.h"
 #include "comprimir.h"
-
+#include "descomprimir.h"
 int main(int argc, char* argv[]){
-    if(argc!=2){
+    if(argc!=3){
         printf("El input recibido es incorrecto.");
         return argc;
     }
-    charWeightList cwlist = readInput(argv[1]);
-    sortWeights(&cwlist);
-    for(int i=0;i<cwlist.size && cwlist.list[i].weight>0;i++){
-        printf("%c %d  ", cwlist.list[i].character, cwlist.list[i].weight);
-    }
-    printf("%c %d\n",cwlist.list[0].character, cwlist.list[0].weight);
-    ListStruct lsList = transformListForRecursion(cwlist);
-    Arbol* arbol = crearArbol(&lsList);
-    //printArbol(arbol);
-    CodigoList lista = calloc(256,sizeof(unsigned int));
-    printf("break 24");
-    char* serializado = serializar(arbol);
-    printf("break26");
-    printf("%s\n", serializado);
-    //Arbol* deserializado = deserializar(&serializado);
-    //printf("%s\n", serializar(deserializado));
-    
-    calcularCodigos(arbol,1,lista);
-    /*for(int i=1;i<256;i++){
-        if(lista[i]>0){
-            printf("%c %d\n", i, lista[i]);
+    if(argv[2][0]=='c'){
+        charWeightList cwlist = readInput(argv[1]);
+        sortWeights(&cwlist);
+        printf("Lista de caracteres:\n");
+        for(int i=0;i<cwlist.size && cwlist.list[i].weight>0;i++){
+            printf("%c %d  ", cwlist.list[i].character, cwlist.list[i].weight);
         }
-    }*/
-    printf("break37");
-    write_binary_file(lista, argv[1], "output.txt", serializado);
+        ListStruct lsList = transformListForRecursion(cwlist);
+        //
+        printf("\nLista para recursion\n");
+        recursiveListElementList* temp = lsList.first;
+        for(;temp!=NULL;temp=temp->next){
+            printf("%c %d ", *(char*)(temp->data->data),temp->data->weight);
+        }
+        //
+        Arbol* arbol = crearArbol(&lsList);
+        printArbol(arbol);
+        CodigoList lista = calloc(256,sizeof(unsigned int));
+        char* serializado = serializar(arbol);
+        printf("%s\n", serializado);
+        calcularCodigos(arbol,1,lista);
+        write_binary_file(lista, argv[1], "output.txt", serializado);
+    }else{
+        descomprimir(argv[1], "descomprimido.txt");
+    }
     return 0;
 }

@@ -73,9 +73,9 @@ Arbol* crearArbolSegunDatos(Arbol* izq, Arbol* der, void* dato){
 }
 
 void printArbol(Arbol* arbol){
-    if(arbol==NULL) return;
+    if(arbol==NULL) {printf("-- "); return;}
+    printf("%c ", arbol->dato==NULL?'-':*(char*)arbol->dato);
     printArbol(arbol->izq);
-    printf("%c ", arbol->dato==NULL?'\0':*(char*)arbol->dato);
     printArbol(arbol->der);
 }
 
@@ -104,7 +104,7 @@ char* serializar(Arbol* arbol){
 Arbol* deserializar(char** buffer){
     if(buffer == NULL) return NULL;
     if (strncmp(*buffer, "--", 2) == 0) {
-        *buffer += 3; 
+        *buffer += (*buffer)[2]=='\0'?2:3; 
         return NULL;
     }
     Arbol* arbol = malloc(sizeof(Arbol));
