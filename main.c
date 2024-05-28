@@ -25,6 +25,7 @@ int main(int argc, char* argv[]){
         for(;temp!=NULL;temp=temp->next){
             printf("%c %d ", *(char*)(temp->data->data),temp->data->weight);
         }
+        printf("\n");
         //
         Arbol* arbol = crearArbol(&lsList);
         printArbol(arbol);
@@ -32,6 +33,7 @@ int main(int argc, char* argv[]){
         char* serializado = serializar(arbol);
         printf("%s\n", serializado);
         calcularCodigos(arbol,1,lista);
+        destruirArbol(arbol);
         write_binary_file(lista, argv[1], "output.txt", serializado);
     }else{
         descomprimir(argv[1], "descomprimido.txt");

@@ -6,17 +6,13 @@ Arbol* crearArbol(ListStruct* list){
     if(list->first==NULL) return NULL;
     //Si el tamaño de la lista es 1, tenemos el arbol final, lo retornamos
     if(list->first->next==NULL) return list->first->data->data;
-    //Si no, tomamos; los ultimos dos elementos de la lista
+    //Si no, tomamos los ultimos dos elementos de la lista
     recursiveListElement* elem1 = list->last->data;
     recursiveListElement* elem2 = list->last->prev->data;
     //Elimino los ultimos dos elementos de la lista
-    recursiveListElementList* aux1 = list->last;
-    recursiveListElementList* aux2 = list->last->prev;
-    list->last= aux2->prev;
-    if(list->last!=NULL) list->last->next= NULL;
-    else list->first=NULL;
-    free(aux1);
-    free(aux2);
+    popRLE(list);
+    popRLE(list);
+    printf("%c ", list->first==NULL?'!':list->last->data->type==PAR?*(char*)(list->last->data->data):'-');
     //Creamos 3 nodos, un nodo intermedio y dos para los ultimos dos elementos de la lista
     Arbol* nodoIzq;
     if(elem1->type==PAR){
@@ -121,3 +117,10 @@ Arbol* deserializar(char** buffer){
     return arbol;
 }
 
+void destruirArbol(Arbol* arbol){
+    if(arbol==NULL) return;
+    if(arbol->dato!=NULL) free(arbol->dato);
+    destruirArbol(arbol->izq);
+    destruirArbol(arbol->der);
+    free(arbol);
+}

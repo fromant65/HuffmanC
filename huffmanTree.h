@@ -16,4 +16,5 @@ Arbol* crearArbolSegunDatos(Arbol* izq, Arbol* der, void* dato);
 void printArbol(Arbol* arbol);
 char* serializar(Arbol* arbol);
 Arbol* deserializar(char** buffer);
+void destruirArbol(Arbol* arbol);
 #endif

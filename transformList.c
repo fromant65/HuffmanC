@@ -32,3 +32,14 @@ void pushRLE(ListStruct *list, recursiveListElement *data){
     if(list->last) list->last->next = newNode;
     list->last=newNode;
 }
+
+void popRLE(ListStruct *list){
+    if(list->last==NULL) return;
+    recursiveListElementList* last = list->last;
+    list->last=last->prev; 
+    if(list->last==NULL) { //En este caso me queda una lista vacía
+        list->first=NULL;
+        return;
+    } else list->last->next=NULL;
+    free(last);
+}

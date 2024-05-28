@@ -30,5 +30,6 @@ typedef struct{
 ListStruct transformListForRecursion(charWeightList list);
 recursiveListElement* newParRLE(char character, TYPES type, size_t weight);
 void pushRLE(ListStruct *list, recursiveListElement* data);
+void popRLE(ListStruct *list);
 
 #endif
