@@ -66,7 +66,7 @@ void write_binary_file(CodigoList codeList, const char* input_filename, const ch
         }
         compressed_buffer[char_count++]=buffer;
     }
-    fprintf(output_file, "%d\n%s", char_count-1, compressed_buffer);
+    fprintf(output_file, "%d\n%s", char_count, compressed_buffer);
     fclose(input_file);
     fclose(output_file);
 }
