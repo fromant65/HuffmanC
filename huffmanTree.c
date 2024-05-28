@@ -34,30 +34,8 @@ Arbol* crearArbol(ListStruct* list){
 }
 
 void insertArbolSegunPeso(ListStruct* list, Arbol* arbol, size_t peso){
-    recursiveListElementList* newElem = malloc(sizeof(recursiveListElementList));
-    newElem->data=malloc(sizeof(recursiveListElement));
-    newElem->data->data=arbol;
-    newElem->data->type=ARBOL;
-    newElem->data->weight=peso;
-
-    if(list->first ==NULL){
-        list->first = newElem;
-        list->last = newElem;
-        return;
-    }
-
-    recursiveListElementList* temp=list->first;
-    for(; temp->data->weight > peso;temp=temp->next);
-    recursiveListElementList* ant = temp->prev;
-    
-    if(ant==NULL){
-        list->first=newElem;
-    }else{
-        ant->next=newElem;
-    }
-    newElem->prev=ant;
-    newElem->next=temp;
-    temp->prev=newElem;
+    recursiveListElement* newElem = newArbolRLE(arbol, peso);
+    insertByWeight(newElem,list);
 }
 
 Arbol* crearArbolSegunDatos(Arbol* izq, Arbol* der, void* dato){
